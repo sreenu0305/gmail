@@ -70,6 +70,11 @@ class MyUser(AbstractBaseUser):
         return self.is_admin
 
 
+class Registration(models.Model):
+    myuser = models.OneToOneField(MyUser, related_name='myuser', on_delete=models.CASCADE)
+    phone = models.IntegerField(unique=True)
+
+
 class Gmail(models.Model):
     """ models for email """
     sender = models.ForeignKey(MyUser, related_name='sender', on_delete=models.CASCADE)

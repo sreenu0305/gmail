@@ -1,0 +1,10 @@
+<form action="/gmail/save_register/" method="post">
+    {% csrf_token %}
+<!--    <b>first_name:</b><input type="text" name="first_name"><br>-->
+<!--    <b>last_name:</b><input type="text" name="last_name"><br>-->
+    <b>email address:</b><input type="email" name="email"><br>
+    <b>mobile:</b><input type="number" name="mobile"><br>
+    <b>password:</b><input type="text" name="password"><br>
+    <input type="submit" value="register"><br>
+</form>
+ already have account <a href="/gmail/">login</a>

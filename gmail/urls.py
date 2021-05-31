@@ -3,6 +3,11 @@ from gmail import views
 #
 urlpatterns=[
     path('',views.main,name='main'),
-#     path('login_request/',views.login_request,name='login_request'),
-#     path('login_validate/',views.login_validate,name='login_validate'),
+    path('register/',views.registration,name='register'),
+    path('save_register/',views.save_register,name='save_register'),
+    path('login_validate/',views.login_request,name='login_validate'),
+    path('compose/',views.compose,name='compose'),
+    path('save_mail/',views.save_mail,name='save_mail'),
+    path('inbox/',views.inbox,name='inbox'),
+    path('sent_mail/',views.sent_mail,name='sent_mail'),
 ]

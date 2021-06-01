@@ -6,7 +6,8 @@ from django.contrib.auth import get_user_model
 from account.settings import AUTH_USER_MODEL
 from gmail.models import Gmail, Registration, MyUser
 
-MyUser.site.Register(Gmail)
-MyUser.site.Register(Registration)
+admin.site.register(Gmail)
+admin.site.register(Registration)
+admin.site.register(MyUser)
 
 

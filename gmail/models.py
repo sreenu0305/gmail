@@ -72,7 +72,6 @@ class MyUser(AbstractBaseUser):
 
 class Registration(models.Model):
     myuser = models.OneToOneField(MyUser, related_name='myuser', on_delete=models.CASCADE)
-    phone = models.IntegerField(unique=True)
 
 
 class Gmail(models.Model):
@@ -81,7 +80,7 @@ class Gmail(models.Model):
     reciever = models.ForeignKey(MyUser, related_name='reciever', on_delete=models.CASCADE)
     # sender = models.EmailField()
     # reciever = models.EmailField()
-    file = models.FileField(null=True, blank=True)
+    # file = models.FileField(null=True, blank=True)
     body = models.TextField()
     subject = models.CharField(max_length=10000)
     is_spam = models.BooleanField(default=False)

@@ -2,7 +2,7 @@
 {{error}}
  {% endif %}
 <h2> Gmail app </h2>
-<form action="" method="post">
+<form action="/gmail/login_validate/" method="post">
  {% csrf_token %}
  <b>Email Address</b><input type="email" name="email"><br>
  <b>Password</b><input type="password" name="password"><br>

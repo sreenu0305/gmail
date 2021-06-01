@@ -4,5 +4,11 @@
 <b>subject :</b> {{each.subject}}<br>
 <b>body :</b> {{each.body}}<br>
 <b>file :</b> {{each.file}}<br>
-<hr>
+make spam:<form action="/gmail/{{each.id}}/emp_accept/" method="post">
+ {% csrf_token %}
+ <input type="checkbox" name="is_spam" {% if appication.is_verified %}make spam{% endif %}/>
+ <input type="submit" value="submit">
+</form>
 {% endfor %}
+ <a href="/gmail/view/">Back</a><br>
+<a href="/gmail/logout/">logout</a><br>

@@ -6,7 +6,7 @@ from gmail.models import Gmail
 class GmailForm(ModelForm):
     class Meta:
         model = Gmail
-        fields =['reciever','subject','body','file']
+        fields =['reciever','subject','body']
 
 
 # class UserAdminCreationForm(UserCreationForm):

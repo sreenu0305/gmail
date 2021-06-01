@@ -10,4 +10,8 @@ urlpatterns=[
     path('save_mail/',views.save_mail,name='save_mail'),
     path('inbox/',views.inbox,name='inbox'),
     path('sent_mail/',views.sent_mail,name='sent_mail'),
+    path('<int:id>/make_spam/',views.make_spam,name='make_spam'),
+    path('spam/',views.spam,name='spam'),
+    path('view/',views.view,name='view'),
+    path('logout/',views.logout_page,name='logout'),
 ]

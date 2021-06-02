@@ -90,6 +90,7 @@ def login_request(request):
 def compose(request):
     """ composing mail """
     user = request.user
+    print(user,id)
     form = GmailForm
     return render(request, 'gmail/compose.html', {'form': form, 'user': user})
 
@@ -143,7 +144,8 @@ def sent_mail(request):
 @login_required(login_url='/gmail/')
 def make_spam(request, id):
     """ making spam mails"""
-    Gmail.objects.filter(id=id).update(is_spam=True)
+    data=Gmail.objects.filter(id=id).update(is_spam=True)
+
     return render(request, 'gmail/inbox.html')
 
 
@@ -176,6 +178,7 @@ def make_draft(request, id):
 
 def draft(request):
     data = Gmail.objects.filter(is_draft=True)
+    print(data)
     return render(request, 'gmail/draft.html', {'data': data})
 
 

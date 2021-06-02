@@ -1,13 +1,22 @@
 {% for each in data %}
 <!--<b>sender : </b>-->
-{{ each.sender}}<br><form action="/gmail/{{each.id}}/un_trash/" method="post">
+<form action="/gmail/{{each.id}}/un_trash/" method="post">
  {% csrf_token %}
- <input type="checkbox" name="is_trash" {% if appication.is_verified %}make trash{% endif %}/>
- <input type="submit" value="untrash">
-</form>
-<form action="/gmail/{{each.id}}/delete/" method="post">
- {% csrf_token %}
- <input type="checkbox" name="is_trash" {% if appication.is_verified %}make trash{% endif %}/>
- <input type="submit" value="delete">
+select:
+<input type="checkbox" name="{{each.reciever}}">{{each.reciever}}
+<input type="submit" value="untrash">
 </form>
 {% endfor %}
+<!--<b>from:</b>{{ each.sender}}<br><b>to:</b>{{each.reciever}}<form action="/gmail/{{each.id}}/un_trash/" method="post">-->
+<!-- {% csrf_token %}-->
+<!-- <input type="checkbox" name="is_trash" {% if appication.is_verified %}make trash{% endif %}/>-->
+<!-- <input type="submit" value="untrash">-->
+<!--</form>-->
+<!--<form action="/gmail/{{each.id}}/delete/" method="post">-->
+<!-- {% csrf_token %}-->
+<!-- <input type="checkbox" name="is_trash" {% if appication.is_verified %}make trash{% endif %}/>-->
+<!-- <input type="submit" value="delete">-->
+<!--</form>-->
+<!--<hr>-->
+<!-- <a href="/gmail/view/">Back</a><br>-->
+<!--<a href="/gmail/logout/">logout</a><br>-->

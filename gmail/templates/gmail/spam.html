@@ -4,6 +4,17 @@
 <b>subject :</b>  {{each.subject}}<br>
 <b>body :</b> {{each.body}}<br>
 <b>file :</b> {{each.file}}<br>
+make unspam:<form action="/gmail/{{each.id}}/make_unspam/" method="post">
+ {% csrf_token %}
+ <input type="checkbox" name="is_spam" {% if appication.is_verified %}make spam{% endif %}/>
+ <input type="submit" value="submit">
+</form>
+trash:<form action="/gmail/{{each.id}}/make_trash/" method="post">
+ {% csrf_token %}
+ <input type="checkbox" name="is_trash" {% if appication.is_verified %}make trash{% endif %}/>
+ <input type="submit" value="submit">
+</form>
+<hr>
 <hr>
 {% endfor %}
 <a href="/gmail/view/">Back</a><br>

@@ -64,7 +64,7 @@ def registration(request):
 def save_register(request):
     """saving details """
     if request.method == "POST":
-        user=MyUser.objects.create_user(email=request.POST['email'], password=request.POST['password'])
+        user = MyUser.objects.create_user(email=request.POST['email'], password=request.POST['password'])
         Registration.objects.create(myuser=user)
         return render(request, 'gmail/index.html')
     else:
@@ -89,8 +89,9 @@ def login_request(request):
 
 def compose(request):
     """ composing mail """
+    user = request.user
     form = GmailForm
-    return render(request, 'gmail/compose.html', {'form': form})
+    return render(request, 'gmail/compose.html', {'form': form, 'user': user})
 
 
 def save_mail(request):
@@ -108,7 +109,7 @@ def save_mail(request):
                              subject=subject,
                              reciever=MyUser.objects.get(email=reciever),
                              body=body)
-        return render(request, 'gmail/mail_sent.html', {'email': reciever})
+        return render(request, 'gmail/email.html', {'email': reciever})
 
     return render(request, 'gmail/index.html')
 
@@ -149,7 +150,8 @@ def make_spam(request, id):
 @login_required(login_url='/gmail/')
 def spam(request):
     """ spam mails """
-    data = Gmail.objects.filter(is_spam=True)
+    user = request.user
+    data = Gmail.objects.filter(is_spam=True).filter(reciever=user)
     return render(request, 'gmail/spam.html', {'mail': data})
 
 
@@ -157,3 +159,41 @@ def logout_page(request):
     """ logout page"""
     logout(request)
     return HttpResponseRedirect('/gmail/')
+
+
+@login_required(login_url='/gmail/')
+def make_unspam(request, id):
+    """ making spam mails"""
+    Gmail.objects.filter(id=id).update(is_spam=False)
+    return render(request, 'gmail/inbox.html')
+
+
+def make_draft(request, id):
+    """ making drafts """
+    Gmail.objects.filter(id=id).update(is_draft=True)
+    return render(request, 'gmail/email.html', {'msg': 'message saved as draft'})
+
+
+def draft(request):
+    data = Gmail.objects.filter(is_draft=True)
+    return render(request, 'gmail/draft.html', {'data': data})
+
+
+def make_trash(request, id):
+    Gmail.objects.filter(id=id).update(is_trash=True)
+    return render(request, 'gmail/email.html')
+
+
+def trash(request):
+    data = Gmail.objects.filter(is_trash=True)
+    return render(request, 'gmail/trash.html', {'data': data})
+
+
+def make_untrash(request, id):
+    Gmail.objects.filter(id=id).update(is_trash=False)
+    return render(request, 'gmail/email.html')
+
+
+def delete(request, id):
+    Gmail.objects.filter(id=id).delete()
+    return render(request, 'gmail/email.html')

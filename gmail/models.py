@@ -72,6 +72,8 @@ class MyUser(AbstractBaseUser):
 
 class Registration(models.Model):
     myuser = models.OneToOneField(MyUser, related_name='myuser', on_delete=models.CASCADE)
+    make_spam=models.BooleanField(default=False)
+
 
 
 class Gmail(models.Model):
@@ -84,3 +86,5 @@ class Gmail(models.Model):
     body = models.TextField()
     subject = models.CharField(max_length=10000)
     is_spam = models.BooleanField(default=False)
+    is_draft = models.BooleanField(default=False)
+    is_trash= models.BooleanField(default=False)

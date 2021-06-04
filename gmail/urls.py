@@ -21,4 +21,5 @@ urlpatterns=[
     path('trash/',views.trash,name='trash'),
     path('<int:id>/un_trash/',views.make_untrash,name='un_trash'),
     path('<int:id>/delete/',views.delete,name='delete'),
+    path('save_draft/',views.save_draftmail,name='save_draft'),
 ]

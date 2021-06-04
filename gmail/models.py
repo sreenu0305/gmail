@@ -85,7 +85,7 @@ class Gmail(models.Model):
     # sender = models.EmailField()
     # reciever = models.EmailField()
     # file = models.FileField(null=True, blank=True)
-    body = models.TextField(blank=True,null=True)
+    body = models.TextField()
     subject = models.CharField(max_length=10000,blank=True,null=True)
     is_spam = models.BooleanField(default=False)
     is_draft = models.BooleanField(default=False)

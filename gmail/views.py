@@ -90,35 +90,35 @@ def login_request(request):
 def compose(request):
     """ composing mail """
     user = request.user
-    print(user,id)
+    print(user.id)
     form = GmailForm
     return render(request, 'gmail/compose.html', {'form': form, 'user': user})
 
 
-def save_mail(request):
-    """ saving mils"""
-    if request.method == 'POST':
-        subject = request.POST.get('subject')
-        body = request.POST.get('message')
-        # file = request.POST.get('file')
-        reciever = request.POST.get('email')
-        send_mail(subject, body, settings.EMAIL_HOST_USER,
-                  [reciever], fail_silently=False)
-        import pdb
-        # pdb.set_trace()
-        Gmail.objects.create(sender=request.user,
-                             subject=subject,
-                             reciever=MyUser.objects.get(email=reciever),
-                             body=body)
-        return render(request, 'gmail/email.html', {'email': reciever})
-
-    return render(request, 'gmail/index.html')
+# def save_mail(request):
+#     """ saving mils"""
+#     if request.method == 'POST':
+#         subject = request.POST.get('subject')
+#         body = request.POST.get('message')
+#         # file = request.POST.get('file')
+#         reciever = request.POST.get('email')
+#         send_mail(subject, body, settings.EMAIL_HOST_USER,
+#                   [reciever], fail_silently=False)
+#         import pdb
+#         # pdb.set_trace()
+#         Gmail.objects.create(sender=request.user,
+#                              subject=subject,
+#                              reciever=MyUser.objects.get(email=reciever),
+#                              body=body)
+#         return render(request, 'gmail/email.html', {'email': reciever})
+#
+#     return render(request, 'gmail/index.html')
 
 
 @login_required(login_url='/gmail/')
 def inbox(request):
     """ mail inbox """
-    mail = Gmail.objects.filter(reciever=request.user)
+    mail = Gmail.objects.filter(reciever=request.user).filter(is_spam=False)
     return render(request, 'gmail/inbox.html', {'mail': mail})
 
 
@@ -144,7 +144,7 @@ def sent_mail(request):
 @login_required(login_url='/gmail/')
 def make_spam(request, id):
     """ making spam mails"""
-    data=Gmail.objects.filter(id=id).update(is_spam=True)
+    Gmail.objects.filter(id=id).update(is_spam=True)
 
     return render(request, 'gmail/inbox.html')
 
@@ -188,7 +188,8 @@ def make_trash(request, id):
 
 
 def trash(request):
-    data = Gmail.objects.filter(is_trash=True)
+    user = request.user
+    data = Gmail.objects.filter(is_trash=True).filter(reciever=user).filter(sender=user)
     return render(request, 'gmail/trash.html', {'data': data})
 
 
@@ -200,3 +201,57 @@ def make_untrash(request, id):
 def delete(request, id):
     Gmail.objects.filter(id=id).delete()
     return render(request, 'gmail/email.html')
+
+
+def save_draftmail(request):
+    """ saving mils"""
+    if request.method == 'POST':
+        subject = request.POST.get('subject')
+        body = request.POST.get('message')
+        # file = request.POST.get('file')
+        reciever = request.POST.get('email')
+        # send_mail(subject, body, settings.EMAIL_HOST_USER,
+        #           [reciever], fail_silently=False)
+        import pdb
+        # pdb.set_trace()
+        Gmail.objects.create(sender=request.user,
+                             subject=subject,
+                             reciever=MyUser.objects.get(email=reciever),
+                             body=body, is_draft=True)
+        return render(request, 'gmail/email.html', {'email': reciever})
+
+    return render(request, 'gmail/index.html')
+
+
+def save_mail(request):
+    """TO send the mails from user"""
+    if request.method == "POST":
+        if request.POST["send"] != "cancel":
+            # form = MailsForm(request.POST)
+            # user = Registration.objects.get(myuser=request.user)
+            subject = request.POST.get('subject')
+            body = request.POST.get('message')
+            # file = request.POST.get('file')
+            reciever = request.POST.get('email')
+            send_mail(subject, body, settings.EMAIL_HOST_USER,
+                      [reciever], fail_silently=False)
+            Gmail.objects.create(sender=request.user,
+                             subject=subject,
+                             reciever=MyUser.objects.get(email=reciever),
+                             body=body, is_draft=True)
+            return render(request,"gmail/email.html")
+        else:
+            # user = Registration.objects.get(myuser=request.user)
+            subject = request.POST.get('subject')
+            body = request.POST.get('message')
+            # file = request.POST.get('file')
+            reciever = request.POST.get('email')
+            send_mail(subject, body, settings.EMAIL_HOST_USER,
+                      [reciever], fail_silently=False)
+            Gmail.objects.create(sender=request.user,
+                             subject=subject,
+                             reciever=MyUser.objects.get(email=reciever),
+                             body=body,is_draft=True)
+            return render(request, "gmail/email.html")
+    else:
+        return render(request, "gmail/compose.html")

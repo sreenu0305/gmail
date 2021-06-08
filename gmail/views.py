@@ -129,7 +129,7 @@ def sent_mail(request):
     # user = MyUser.objects.get(myuser=request.user)
     print(mail)
     print(type(mail))
-    sent = Gmail.objects.filter(sender=user).filter(is_spam=False)
+    sent = Gmail.objects.filter(sender=user).filter(is_spam=False).filter(is_trash=False)
     print([each for each in sent])
     # print(mail)
     import pdb
@@ -177,7 +177,9 @@ def make_draft(request, id):
 
 
 def draft(request):
-    data = Gmail.objects.filter(is_draft=True)
+    user = request.user
+
+    data = Gmail.objects.filter(is_draft=True).filter(sender=user)
     print(data)
     return render(request, 'gmail/draft.html', {'data': data})
 
@@ -189,7 +191,7 @@ def make_trash(request, id):
 
 def trash(request):
     user = request.user
-    data = Gmail.objects.filter(is_trash=True).filter(reciever=user).filter(sender=user)
+    data = Gmail.objects.filter(is_trash=True).filter(id=user.id)
     return render(request, 'gmail/trash.html', {'data': data})
 
 
@@ -203,24 +205,24 @@ def delete(request, id):
     return render(request, 'gmail/email.html')
 
 
-def save_draftmail(request):
-    """ saving mils"""
-    if request.method == 'POST':
-        subject = request.POST.get('subject')
-        body = request.POST.get('message')
-        # file = request.POST.get('file')
-        reciever = request.POST.get('email')
-        # send_mail(subject, body, settings.EMAIL_HOST_USER,
-        #           [reciever], fail_silently=False)
-        import pdb
-        # pdb.set_trace()
-        Gmail.objects.create(sender=request.user,
-                             subject=subject,
-                             reciever=MyUser.objects.get(email=reciever),
-                             body=body, is_draft=True)
-        return render(request, 'gmail/email.html', {'email': reciever})
-
-    return render(request, 'gmail/index.html')
+# def save_draftmail(request):
+#     """ saving mils"""
+#     if request.method == 'POST':
+#         subject = request.POST.get('subject')
+#         body = request.POST.get('message')
+#         # file = request.POST.get('file')
+#         reciever = request.POST.get('email')
+#         # send_mail(subject, body, settings.EMAIL_HOST_USER,
+#         #           [reciever], fail_silently=False)
+#         import pdb
+#         # pdb.set_trace()
+#         Gmail.objects.create(sender=request.user,
+#                              subject=subject,
+#                              reciever=MyUser.objects.get(email=reciever),
+#                              body=body, is_draft=True)
+#         return render(request, 'gmail/email.html', {'email': reciever})
+#
+#     return render(request, 'gmail/index.html')
 
 
 def save_mail(request):
@@ -236,22 +238,35 @@ def save_mail(request):
             send_mail(subject, body, settings.EMAIL_HOST_USER,
                       [reciever], fail_silently=False)
             Gmail.objects.create(sender=request.user,
-                             subject=subject,
-                             reciever=MyUser.objects.get(email=reciever),
-                             body=body, is_draft=True)
-            return render(request,"gmail/email.html")
+                                 subject=subject,
+                                 reciever=MyUser.objects.get(email=reciever),
+                                 body=body)
+            return render(request, "gmail/email.html")
         else:
             # user = Registration.objects.get(myuser=request.user)
             subject = request.POST.get('subject')
             body = request.POST.get('message')
             # file = request.POST.get('file')
             reciever = request.POST.get('email')
-            send_mail(subject, body, settings.EMAIL_HOST_USER,
-                      [reciever], fail_silently=False)
+            # send_mail(subject, body, settings.EMAIL_HOST_USER,
+            #           [reciever], fail_silently=False)
             Gmail.objects.create(sender=request.user,
-                             subject=subject,
-                             reciever=MyUser.objects.get(email=reciever),
-                             body=body,is_draft=True)
+                                 subject=subject,
+                                 reciever=MyUser.objects.get(email=reciever),
+                                 body=body, is_draft=True)
             return render(request, "gmail/email.html")
     else:
         return render(request, "gmail/compose.html")
+
+
+#
+# def make_undraft(request, id):
+#     data = Gmail.objects.get(id=id)
+#     return render(request, 'gmail/compose.html')
+#
+
+def un_draft(request, id):
+    """ sending draft mails"""
+    un_draft = Gmail.objects.get(id=id)
+    un_draft.is_draft = False
+    return render(request, "gmail/undraft.html", {"new": un_draft})

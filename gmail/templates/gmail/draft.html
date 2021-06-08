@@ -1,7 +1,14 @@
 <h2>hi</h2>
 {% for each in data %}
 <b>sender:</b>{{each.sender}}<br>
-<b>reciever:</b>{{each.reciever}}<br><hr>
+<b>reciever:</b>{{each.reciever}}<br>
+<b>subject:</b>{{each.subject}}<br>
+<b>body:</b>{{each.body}}<br>
+<form action="/gmail/{{each.id}}/un_draft/" method="post">
+ {% csrf_token %}
+ <input type="checkbox" name="resend" >
+ <input type="submit" value="submit">
+</form>
 {% endfor %}
  <a href="/gmail/view/">Back</a><br>
 <a href="/gmail/logout/">logout</a><br>

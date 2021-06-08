@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/gmail/save_mail/" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+    Receiver : <input type="text" name="email" value="{{new.reciever}}"><br>
+    Subject : <input type="text" name="subject" value="{{new.subject}}"><br>
+    Body :  <input type="text" name="message" value="{{new.body}}"><br>
+  <input type="submit" name="send" value="submit"><br> <input type="submit" name="send" value="cancel">
+</form><br>
+<a href="/gmail/view/">back</a>
+</body>
+</html>
